@@ -1,0 +1,83 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog.yaml
+  - changeSet:
+      id: 1
+      author: test
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: age
+                  type: TINYINT
+                  constraints:
+                    nullable: false
+                    minValue: 0
+                    maxValue: 150
+              - column:
+                  name: password
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: houses
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: address
+                  type: varchar(512)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: owner
+                  type: BIGINT
+                  constraints:
+                      nullable: false
+        - createTable:
+            tableName: houses_occupants
+            columns:
+              - column:
+                  name: houses_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: occupants_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+            primaryKey:
+              - columnNames:
+                  - occupants_id
+                  - houses_id
+              - addForeignKeyConstraint:
+                  baseTableName: houses_occupants
+                  baseColumnNames:
+                    - occupants_id
+                    - houses_id
+                  referencedTableName: user
+                  referencedColumnNames:
+                    - id
+                    - id
+                  constraintName: houses_occupants_fk
+                  onDelete: cascade
